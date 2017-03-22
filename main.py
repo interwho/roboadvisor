@@ -55,33 +55,7 @@ while keep_trading:
         print("%s costs $%s per share today" % (i, price))
         prices[i] = price
 
-    # Record which stocks we need to rebalance
-    to_rebalance = dict()
-    for i in desired_portfolio:
-        # We don't need to rebalance cash
-        if i == TradingAPI.CASH:
-            continue
-
-        # If we don't already own this stock, we need to get it's price to use later
-        if i not in prices:
-            prices[i] = trading_api.get_price(i)
-
-        # If the difference between what we own and what we want to own is greater than tolerance, we need to rebalance
-        difference = ((prices[i] * portfolio[i]) / total_value) - desired_portfolio[i]
-        if abs(difference) > tolerance:
-            print("%s needs rebalancing, it is %s percent off from our target percentage" % (
-                i, round(difference * 100, 2)))
-            to_rebalance[i] = difference
-
-    # Rebalance the portfolio
-    while to_rebalance:
-        # Start with the stock that we need to sell the most of, so we don't run out of cash.
-        ticker = max(to_rebalance, key=to_rebalance.get)
-        # Calculate how many shares we need to purchase or sell - negative quantity indicates a sell order
-        quantity = int((desired_portfolio[ticker] * (total_value / prices[ticker])) - portfolio[ticker])
-        print("Placing order for %s shares of %s" % (quantity, ticker))
-        trading_api.order(ticker, quantity)
-        del to_rebalance[ticker]
+    # TODO: Build the rebalancing algorithm
 
     # Print a summary of our portfolio
     print("--- DAY %s RESULTS ---" % day_counter)
