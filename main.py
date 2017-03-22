@@ -17,16 +17,6 @@ cash_to_start = 10000
 # Initialize the Trading API
 trading_api = TradingAPI(cash_to_start)
 
-
-def get_bool(prompt):
-    """Evaluates user input and returns False when 'n' is entered"""
-    while True:
-        try:
-            return {"y": True, "n": False}[input(prompt).lower()]
-        except KeyError:
-            return True
-
-
 # Convert the desired portfolio and tolerance into multipliers
 for i in desired_portfolio:
     desired_portfolio[i] /= 100
@@ -98,4 +88,4 @@ while keep_trading:
                 i, round(portfolio[i], 2), round(((portfolio[i] * prices[i] * 100) / total_value), 2)))
 
     day_counter += 1
-    keep_trading = get_bool("Should we continue trading? (y/n)\n\n")
+    keep_trading = not (input("Should we continue trading? (y/n)\n\n").lower() == 'n')
